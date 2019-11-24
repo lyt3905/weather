@@ -29,6 +29,7 @@
 
     <include layout="@layout/now" />
 
+
 </LinearLayout></ScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

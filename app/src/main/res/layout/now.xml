@@ -21,5 +21,8 @@
         android:layout_gravity="end"
         android:textColor="#0C0C0C"
         android:textSize="60sp" />
-
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/image"/>
 </LinearLayout>

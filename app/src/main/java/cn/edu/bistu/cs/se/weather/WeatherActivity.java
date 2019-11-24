@@ -13,20 +13,28 @@ import android.view.View;
 import android.widget.Button;
 
 
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import cn.edu.bistu.cs.se.weather.gson.Weather;
 import cn.edu.bistu.cs.se.weather.service.AutoUpdateService;
 import cn.edu.bistu.cs.se.weather.util.HttpUtil;
 import cn.edu.bistu.cs.se.weather.util.Utility;
+import cn.edu.bistu.cs.se.weather.util.toPinyin;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -41,7 +49,7 @@ public class WeatherActivity extends AppCompatActivity {
     private Button navButton;
 
     private TextView titleCity;
-
+    private ImageView imageView;
     private TextView titleUpdateTime;
 
     private TextView degreeText;
@@ -58,7 +66,7 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefreshLayout =findViewById(R.id.swipe_refresh);
 
         drawerLayout=findViewById(R.id.drawer_layout);
-
+        imageView=findViewById(R.id.image);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         titleCity = (TextView) findViewById(R.id.title_city);
         titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
@@ -151,6 +159,30 @@ public class WeatherActivity extends AppCompatActivity {
         titleUpdateTime.setText(updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
+// 拿到名称列表
+        String[] iconName = getResources().getStringArray(R.array.scene_icon_list);
+// 新建ID列表
+        Map<String,Integer> map=new HashMap<>();
+
+        int[] icons = new int[iconName.length];
+        for (int i = 0; i < iconName.length; i++) {
+            // 获得ID
+            int temp;
+            temp = getResources().getIdentifier(iconName[i], "drawable",getPackageName());
+           icons[i]=temp;
+            map.put(iconName[i],temp);
+        }
+        toPinyin.toPinYin(weatherInfo);
+        Log.d("tag----->",map.get("baoxue")+"~~~"+icons[1]);
+        Log.d("tag----->",weatherInfo+"~~"+toPinyin.toPinYin(weatherInfo));
+        try{
+
+            imageView.setImageDrawable(getResources().getDrawable(map.get(toPinyin.toPinYin(weatherInfo))));
+
+        }catch (Exception e){}
+
+
+
         Intent intent=new Intent(this, AutoUpdateService.class);
         startService(intent);
 
